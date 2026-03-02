@@ -14,7 +14,7 @@ include("config.php");
         <option value="Lease">Lease</option>
     </select>
 
-    <button onclick="applyFilter()">Apply Filter</button>
+    <button class="filter-btn" onclick="applyFilter()">Apply Filter</button>
 </div>
 
 <!-- CARDS CONTAINER -->
@@ -41,6 +41,6 @@ include("config.php");
     </div>
 </div>
 
-<a href="home.php">← Back to Home</a>
+<a class="back-home-btn" href="home.php">Back to Home</a>
 
 <?php include("includes/footer.php"); ?>

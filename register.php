@@ -53,7 +53,7 @@ if(isset($_POST['register'])){
 <body>
 
 <!-- HELP BUTTON -->
-<button class="help-btn" onclick="openHelp()">Help?</button>
+<button class="help-btn" onclick="openHelp()">Help.?</button>
 
 <!-- HELP MODAL -->
 <div id="helpModal" class="modal">
@@ -73,9 +73,22 @@ if(isset($_POST['register'])){
     <form method="POST">
         <input type="text" name="username" placeholder="Enter Username" required>
         <input type="email" name="email" placeholder="Enter Email" required>
-        <div class="password-wrapper">
-    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
-    <span class="toggle-password" onclick="togglePassword('confirm_password', this)">👁</span>
+       <div class="password-wrapper">
+    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+
+    <span class="toggle-password" onclick="togglePassword('password', this)">
+        <!-- Default icon = Eye -->
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="20" height="20" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round">
+            <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/>
+            <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
+            <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/>
+            <path d="m2 2 20 20"/>
+        </svg>
+    </span>
 </div>
         <button type="submit" name="register">Sign Up</button>
     </form>
