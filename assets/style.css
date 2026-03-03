@@ -333,3 +333,159 @@ body {
     transition: 0.3s ease;
     font-weight: 700;
 }
+
+.profile-btn {
+    background: #8b7a4a;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+.profile-card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout-btn {
+    margin-left: 10px;
+}
+.back-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #8b7a4a;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: 0.3s ease;
+    font-weight: 700;
+}
+
+
+
+.profile-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:20px;
+}
+
+.profile-card {
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+.profile-box-header-heading{
+    font-size: 24px;
+    font-weight: 700;
+    color: #8b7a4a;
+}
+
+.profile-image-section {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-card input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgb(190, 179, 149);
+    color: rgb(122, 116, 116);
+    font-size: 16px;
+}
+.profile-card input:focus{
+    border: 1px solid rgb(190, 179, 149);
+    outline: none;
+}
+
+.profile-card button {
+    padding: 13px;
+    border: none;
+    background: #8b7a4a;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 700;
+}
+
+
+.back-btn {
+    display: inline-block;
+    padding: 12px 12px;
+    background: #8b7a4a;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.toast {
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.toast.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.toast.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+.profile-box-sub-heading{
+    font-size: 18px;
+    font-weight: 600;
+    margin: 8px 0px;
+    color: #8b7a4a;
+}
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.header-profile-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #8b7a4a;
+    transition: 0.3s ease;
+}
+
+.user-info:hover .header-profile-img {
+    transform: scale(1.05);
+}

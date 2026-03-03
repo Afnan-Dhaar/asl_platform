@@ -1,9 +1,10 @@
-<?php include("config.php"); ?>
+<?php 
+include("config.php");
 
-<?php
 // If already logged in → go to home
 if(isset($_SESSION['user_id'])){
     header("Location: home.php");
+    exit();
 }
 ?>
 
@@ -14,7 +15,6 @@ if(isset($_SESSION['user_id'])){
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-
 
 <!-- HELP BUTTON -->
 <button class="help-btn" onclick="openHelp()">Help.?</button>
@@ -34,36 +34,37 @@ if(isset($_SESSION['user_id'])){
 <!-- LOGIN CONTAINER -->
 <div class="login-box">
     <h2>User Login</h2>
-    <p class="login-p-tag">Hey, Enter your details to get login
-to your account</p>
+    <p class="login-p-tag">
+        Hey, Enter your details to get login to your account
+    </p>
+
     <form method="POST">
-    <input type="text" name="email" placeholder="Enter Email" required>
+        <input type="email" name="email" placeholder="Enter Email" required>
 
-    <div class="password-wrapper">
-    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Enter Password" required>
 
-    <span class="toggle-password" onclick="togglePassword('password', this)">
-        <!-- DEFAULT = Eye Off -->
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="20" height="20" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round">
-            <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/>
-            <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
-            <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/>
-            <path d="m2 2 20 20"/>
-        </svg>
-    </span>
-</div>
+            <span class="toggle-password" onclick="togglePassword('password', this)">
+                <!-- Eye Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="20" height="20" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/>
+                    <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
+                    <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/>
+                    <path d="m2 2 20 20"/>
+                </svg>
+            </span>
+        </div>
 
-    <button type="submit" name="login">Sign In</button>
-</form>
+        <button type="submit" name="login">Sign In</button>
+    </form>
 
     <p>No account?
         <a href="register.php">Sign Up</a>
     </p>
-    
 </div>
 
 <!-- TOAST MESSAGE -->
@@ -74,14 +75,17 @@ to your account</p>
 </html>
 
 <?php
-// LOGIN LOGIC
+// ================= LOGIN LOGIC =================
 if(isset($_POST['login'])){
 
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
+    // Prepared statement (SECURE)
+    $stmt = $conn->prepare("SELECT id, username, password, profile_image FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if($result->num_rows > 0){
 
@@ -89,11 +93,15 @@ if(isset($_POST['login'])){
 
         if(password_verify($password, $user['password'])){
 
+            // Store session data
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['profile_image'] = $user['profile_image'] ?? 'default.png';
 
-            echo "<script>showToast('Login Successful','success'); 
-                  setTimeout(()=>{window.location='home.php'},1500);</script>";
+            echo "<script>
+                showToast('Login Successful','success'); 
+                setTimeout(()=>{window.location='home.php'},1500);
+            </script>";
 
         }else{
             echo "<script>showToast('Wrong Password','error');</script>";
@@ -102,5 +110,7 @@ if(isset($_POST['login'])){
     }else{
         echo "<script>showToast('User Not Found','error');</script>";
     }
+
+    $stmt->close();
 }
 ?>

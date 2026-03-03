@@ -41,13 +41,26 @@ if (!isset($_SESSION['user_id'])) {
     </nav>
 
     <!-- RIGHT: USER INFO -->
-    <div class="user-section">
+    <!-- RIGHT: USER INFO -->
+<div class="user-section">
+
+    <a href="profile.php" class="user-info">
+
+        <img src="uploads/profile/<?php 
+            echo !empty($_SESSION['profile_image']) 
+                ? $_SESSION['profile_image'] 
+                : 'default.png'; 
+        ?>" class="header-profile-img">
+
         <span class="username">
-            👤 <?php echo $_SESSION['username']; ?>
+            <?php echo $_SESSION['username']; ?>
         </span>
 
-        <a href="logout.php" class="logout-btn">Logout</a>
-    </div>
+    </a>
+
+    <a href="logout.php" class="logout-btn">Logout</a>
+
+</div>
 
 </header>
 
