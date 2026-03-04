@@ -73,7 +73,6 @@ if(isset($_SESSION['user_id'])){
 <script src="assets/script.js"></script>
 </body>
 </html>
-
 <?php
 // ================= LOGIN LOGIC =================
 if(isset($_POST['login'])){
@@ -81,8 +80,10 @@ if(isset($_POST['login'])){
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // Prepared statement (SECURE)
-    $stmt = $conn->prepare("SELECT id, username, password, profile_image FROM users WHERE email = ?");
+    // Now selecting role + status also
+    $stmt = $conn->prepare("SELECT id, username, password, profile_image, role, status 
+                            FROM users 
+                            WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -91,17 +92,34 @@ if(isset($_POST['login'])){
 
         $user = $result->fetch_assoc();
 
+        // 🔴 Check if account is inactive
+        if($user['status'] == 'inactive'){
+            echo "<script>showToast('Your account is inactive. Contact Admin.','error');</script>";
+            exit();
+        }
+
         if(password_verify($password, $user['password'])){
 
-            // Store session data
+            // ✅ Store session data
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['profile_image'] = $user['profile_image'] ?? 'default.png';
+            $_SESSION['role'] = $user['role'];   // VERY IMPORTANT
 
             echo "<script>
                 showToast('Login Successful','success'); 
-                setTimeout(()=>{window.location='home.php'},1500);
             </script>";
+
+            // ✅ Redirect based on role
+            if($user['role'] == 'admin'){
+                echo "<script>
+                    setTimeout(()=>{window.location='home.php'},1500);
+                </script>";
+            }else{
+                echo "<script>
+                    setTimeout(()=>{window.location='home.php'},1500);
+                </script>";
+            }
 
         }else{
             echo "<script>showToast('Wrong Password','error');</script>";
@@ -113,4 +131,4 @@ if(isset($_POST['login'])){
 
     $stmt->close();
 }
-?>
+?> 

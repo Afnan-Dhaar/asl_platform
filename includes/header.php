@@ -37,6 +37,9 @@ if (!isset($_SESSION['user_id'])) {
     <nav class="menu">
         <a href="home.php">ASL Platform</a>
         <a href="analytics.php">More Analytics</a>
+        <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
+    <a href="admin_users.php">Admin Panel</a>
+<?php endif; ?>
         <a href="#">Reports</a>
     </nav>
 
