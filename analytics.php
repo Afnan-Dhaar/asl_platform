@@ -1,6 +1,6 @@
-<?php include("includes/header.php"); ?>
 <?php
 include("config.php");
+include("includes/header.php");
 ?>
 <h2>Analytics Page</h2>
 

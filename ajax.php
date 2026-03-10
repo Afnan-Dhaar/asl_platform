@@ -1,66 +1,64 @@
 <?php
-// ============================================
-// AJAX HANDLER FILE
-// This file handles:
-// 1) Fetch single asset (for modal)
-// 2) Filter assets (for analytics page)
-// ============================================
-
 include("config.php");
 
-// ================================
-// 1️⃣ FETCH SINGLE ASSET FOR MODAL
-// ================================
-if (isset($_POST['action']) && $_POST['action'] == "get_asset") {
+$action = $_POST['action'] ?? '';
 
-    $id = intval($_POST['id']);
+/* ===============================
+GET SINGLE ASSET FOR MODAL
+=============================== */
 
-    $query = $conn->query("SELECT * FROM assets WHERE id = $id");
-    $row = $query->fetch_assoc();
+if($action == "get_asset"){
 
-    // Return JSON response
-    echo json_encode($row);
-    exit();
+$id = intval($_POST['id']);
+
+$result = $conn->query("SELECT * FROM assets WHERE id=$id");
+
+$data = $result->fetch_assoc();
+
+header('Content-Type: application/json');
+
+echo json_encode($data);
+
+exit();
 }
 
-// ================================
-// 2️⃣ FILTER ASSETS
-// ================================
-if (isset($_POST['action']) && $_POST['action'] == "filter_assets") {
 
-    // Safely get values (avoid undefined errors)
-    $city = isset($_POST['city']) ? $_POST['city'] : "";
-    $status = isset($_POST['status']) ? $_POST['status'] : "";
+/* ===============================
+FILTER ASSETS (Analytics + Home)
+=============================== */
 
-    $where = "WHERE 1=1";
+if($action == "filter_assets"){
 
-if (!empty($city)) {
-    $city = $conn->real_escape_string($city);
-    $where .= " AND city = '$city'";
+$city = $_POST['city'] ?? '';
+$status = $_POST['status'] ?? '';
+
+$query = "SELECT * FROM assets WHERE 1";
+
+if($city != ""){
+$query .= " AND city LIKE '%$city%'";
 }
 
-    if (!empty($status)) {
-        $status = $conn->real_escape_string($status);
-        $where .= " AND status = '$status'";
-    }
+if($status != ""){
+$query .= " AND status='$status'";
+}
 
-    $result = $conn->query("SELECT * FROM assets $where");
+$result = $conn->query($query);
 
-    $cards = "";
+while($row = $result->fetch_assoc()){
+?>
 
-    while ($row = $result->fetch_assoc()) {
+<div class="card" onclick="openAssetModal(<?php echo $row['id']; ?>)">
+<h3><?php echo $row['name']; ?></h3>
+<p>Asset Code: <?php echo $row['asset_code']; ?></p>
+<p>Total Lands: <?php echo $row['total_lands']; ?></p>
+<p>Area: <?php echo $row['land_area']; ?> m²</p>
+<p>City: <?php echo $row['city']; ?></p>
+</div>
 
-        $cards .= '
-        <div class="card" onclick="openAssetModal('.$row['id'].')">
-            <h3>'.$row['name'].'</h3>
-            <p><strong>Asset Code:</strong> '.$row['asset_code'].'</p>
-            <p><strong>Total Lands:</strong> '.$row['total_lands'].'</p>
-            <p><strong>Area:</strong> '.$row['land_area'].' m²</p>
-            <p><strong>City:</strong> '.$row['city'].'</p>
-        </div>';
-    }
+<?php
+}
 
-    echo $cards;
-    exit();
+exit();
+
 }
 ?>

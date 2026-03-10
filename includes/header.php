@@ -34,14 +34,22 @@ if (!isset($_SESSION['user_id'])) {
     </div>
 
     <!-- CENTER: MENU -->
-    <nav class="menu">
-        <a href="home.php">ASL Platform</a>
-        <a href="analytics.php">More Analytics</a>
-        <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
-    <a href="admin_users.php">Admin Panel</a>
+<nav class="menu">
+
+<a href="home.php">ASL Platform</a>
+<a href="analytics.php">More Analytics</a>
+
+<?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
+
+<a href="admin_users.php">Admin Panel</a>
+
+<a href="manage_lands.php">Manage Lands</a>
+
 <?php endif; ?>
-        <a href="#">Reports</a>
-    </nav>
+
+<a href="#">Reports</a>
+
+</nav>
 
     <!-- RIGHT: USER INFO -->
     <!-- RIGHT: USER INFO -->

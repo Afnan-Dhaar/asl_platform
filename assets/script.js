@@ -1,10 +1,21 @@
+console.log("SCRIPT LOADED");
 function showToast(message,type){
-    let toast = document.getElementById("toast");
-    toast.innerHTML = message;
-    toast.style.display = "block";
-    toast.style.background = (type=="success") ? "green" : "red";
 
-    setTimeout(()=>{ toast.style.display="none"; },3000);
+let toast=document.getElementById("toast");
+
+toast.innerText=message;
+
+toast.style.background =
+type==="success" ? "#2ecc71" :
+type==="error" ? "#e74c3c" :
+"#333";
+
+toast.style.display="block";
+
+setTimeout(()=>{
+toast.style.display="none";
+},3000);
+
 }
 
 // ===============================
@@ -20,41 +31,64 @@ function closeHelp(){
 // ==========================================
 // OPEN ASSET MODAL (AJAX FETCH SINGLE ASSET)
 // ==========================================
-function openAssetModal(id) {
+function openAssetModal(id){
 
-    showLoader();
+console.log("Opening modal for asset:", id);
 
-    fetch("ajax.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "action=get_asset&id=" + id
-    })
-    .then(response => response.json())
-    .then(data => {
+fetch("ajax.php",{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:"action=get_asset&id="+id
+})
 
-        document.getElementById("modalContent").innerHTML = `
-            <h2>${data.name}</h2>
-            <p><strong>Asset Code:</strong> ${data.asset_code}</p>
-            <p><strong>Total Lands:</strong> ${data.total_lands}</p>
-            <p><strong>Land Area:</strong> ${data.land_area} m²</p>
-            <p><strong>Location:</strong> ${data.location}</p>
-            <p><strong>City:</strong> ${data.city}</p>
-            <p><strong>Status:</strong> ${data.status}</p>
-            <p><strong>Valuation:</strong> SAR ${data.valuation}</p>
-            <p><strong>Description:</strong> ${data.description}</p>
-        `;
+.then(res=>res.json())
 
-        document.getElementById("assetModal").classList.add("show");
+.then(data=>{
 
-        hideLoader();
-    });
+if(!data){
+alert("Asset not found");
+return;
 }
 
-// CLOSE MODAL
+let html = `
+<h2>${data.name}</h2>
+
+<p><strong>Asset Code:</strong> ${data.asset_code}</p>
+<p><strong>Total Lands:</strong> ${data.total_lands}</p>
+<p><strong>Land Area:</strong> ${data.land_area} m²</p>
+<p><strong>Location:</strong> ${data.location}</p>
+<p><strong>City:</strong> ${data.city}</p>
+<p><strong>Status:</strong> ${data.status}</p>
+<p><strong>Valuation:</strong> ${data.valuation}</p>
+<p><strong>Description:</strong> ${data.description}</p>
+
+<br>
+
+<a class="view-btn"
+target="_blank"
+href="https://www.google.com/maps?q=${data.latitude},${data.longitude}">
+View Location on Map
+</a>
+`;
+
+document.getElementById("modalContent").innerHTML = html;
+
+document.getElementById("assetModal").classList.add("show");
+
+})
+
+.catch(err=>{
+console.error("Modal error:",err);
+alert("Error loading asset");
+});
+
+}
+
 function closeModal(){
-    document.getElementById("assetModal").classList.remove("show");
+document.getElementById("assetModal").classList.remove("show");
 }
-
 // ==========================================
 // APPLY FILTER (AJAX)
 // ==========================================
@@ -138,5 +172,84 @@ function togglePassword(inputId, iconWrapper) {
     } else {
         input.type = "password";
         iconWrapper.innerHTML = eyeOffIcon; // show eye-off when hidden
+    }
+}
+function openAddLandModal(){
+let modal = document.getElementById("addLandModal");
+
+if(modal){
+modal.classList.add("show");
+}
+}
+
+function closeAddLandModal(){
+document.getElementById("addLandModal").classList.remove("show");
+}
+function deleteLand(id){
+
+if(confirm("Delete this land?")){
+window.location="delete_land.php?id="+id;
+}
+
+}
+
+function searchLand(){
+
+let input=document.getElementById("searchLand").value.toLowerCase();
+
+let cards=document.querySelectorAll("#landsContainer .card");
+
+cards.forEach(card=>{
+
+let text=card.innerText.toLowerCase();
+
+card.style.display=text.includes(input) ? "block":"none";
+
+});
+
+}
+
+function editLand(
+id,
+name,
+asset_code,
+total_lands,
+land_area,
+location,
+city,
+status,
+valuation,
+description,
+latitude,
+longitude
+){
+
+document.getElementById("edit_id").value = id;
+
+document.getElementById("edit_name").value = name;
+document.getElementById("edit_asset_code").value = asset_code;
+
+document.getElementById("edit_total_lands").value = total_lands;
+document.getElementById("edit_land_area").value = land_area;
+
+document.getElementById("edit_location").value = location;
+document.getElementById("edit_city").value = city;
+
+document.getElementById("edit_status").value = status;
+
+document.getElementById("edit_valuation").value = valuation;
+
+document.getElementById("edit_description").value = description;
+
+document.getElementById("edit_lat").value = latitude;
+document.getElementById("edit_long").value = longitude;
+
+document.getElementById("editLandModal").classList.add("show");
+
+}
+function closeEditLandModal(){
+    const modal = document.getElementById("editLandModal");
+    if(modal){
+        modal.classList.remove("show");
     }
 }
