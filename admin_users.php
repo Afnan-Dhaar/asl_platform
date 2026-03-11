@@ -206,7 +206,7 @@ Edit
 <div id="aslAddModal" class="asl_admin_modal">
 <div class="asl_admin_modal_content">
 <span class="asl_admin_modal_close" onclick="aslCloseModal('aslAddModal')">&times;</span>
-<h3>Add User</h3>
+<h3 class="add-user-modal-heading">Add User</h3>
 <form method="POST">
 <input class="asl_admin_input user-management-add-modal-input" type="text" name="name" placeholder="Name" required>
 <input class="asl_admin_input user-management-add-modal-input" type="email" name="email" placeholder="Email" required>
@@ -231,7 +231,7 @@ Edit
 <div id="aslEditModal" class="asl_admin_modal">
 <div class="asl_admin_modal_content">
 <span class="asl_admin_modal_close" onclick="aslCloseModal('aslEditModal')">&times;</span>
-<h3>Edit User</h3>
+<h3 class="edit-user-modal-heading">Edit User</h3>
 <form method="POST">
 
 <input type="hidden" name="edit_id" id="asl_edit_id">

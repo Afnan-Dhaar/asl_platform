@@ -5,7 +5,7 @@ include("includes/header.php"); // Header layout + session protection
 
 <!-- ================= HOME CARDS SECTION ================= -->
 
-<h2>ASL Platform Assets</h2>
+<h2 class="home-page-heading">ASL Platform Assets</h2>
 
 <!-- Cards Container -->
 <div id="homeCardsContainer" class="cards-container">

@@ -1,4 +1,5 @@
 console.log("SCRIPT LOADED");
+
 function showToast(message,type){
 
 let toast=document.getElementById("toast");
@@ -18,19 +19,24 @@ toast.style.display="none";
 
 }
 
+
 // ===============================
 // HELP MODAL FUNCTIONS
 // ===============================
+
 function openHelp(){
-    document.getElementById("helpModal").classList.add("show");
+document.getElementById("helpModal").classList.add("show");
 }
 
 function closeHelp(){
-    document.getElementById("helpModal").classList.remove("show");
+document.getElementById("helpModal").classList.remove("show");
 }
+
+
 // ==========================================
 // OPEN ASSET MODAL (AJAX FETCH SINGLE ASSET)
 // ==========================================
+
 function openAssetModal(id){
 
 console.log("Opening modal for asset:", id);
@@ -52,7 +58,31 @@ alert("Asset not found");
 return;
 }
 
+let imageHTML = "";
+let documentHTML = "";
+
+if(data.image){
+imageHTML = `
+<img src="uploads/images/${data.image}"
+style="width:100%;max-height:250px;object-fit:cover;border-radius:10px;margin-bottom:15px;">
+`;
+}
+
+if(data.document){
+documentHTML = `
+<br><br>
+<a class="view-btn"
+href="uploads/documents/${data.document}"
+target="_blank">
+Download Land Document
+</a>
+`;
+}
+
 let html = `
+
+${imageHTML}
+
 <h2>${data.name}</h2>
 
 <p><strong>Asset Code:</strong> ${data.asset_code}</p>
@@ -71,6 +101,9 @@ target="_blank"
 href="https://www.google.com/maps?q=${data.latitude},${data.longitude}">
 View Location on Map
 </a>
+
+${documentHTML}
+
 `;
 
 document.getElementById("modalContent").innerHTML = html;
@@ -86,94 +119,117 @@ alert("Error loading asset");
 
 }
 
+
 function closeModal(){
 document.getElementById("assetModal").classList.remove("show");
 }
+
+
 // ==========================================
 // APPLY FILTER (AJAX)
 // ==========================================
+
 function applyFilter(){
 
-    let city = document.getElementById("filterCity").value;
-    let status = document.getElementById("filterStatus").value;
+let city = document.getElementById("filterCity").value;
+let status = document.getElementById("filterStatus").value;
 
-    fetch("ajax.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "action=filter_assets&city=" + encodeURIComponent(city) +
-      "&status=" + encodeURIComponent(status)
-    })
-    .then(response => response.text())
-    .then(data => {
+fetch("ajax.php", {
+method: "POST",
+headers: { "Content-Type": "application/x-www-form-urlencoded" },
+body: "action=filter_assets&city=" + encodeURIComponent(city) +
+"&status=" + encodeURIComponent(status)
+})
+.then(response => response.text())
+.then(data => {
 
-        // Replace cards without page reload
-        document.getElementById("cardsContainer").innerHTML = data;
-    });
+document.getElementById("cardsContainer").innerHTML = data;
+
+});
+
 }
+
+
 // ==========================================
-// LOAD ALL CARDS ON HOME PAGE (AJAX)
+// LOAD ALL CARDS ON HOME PAGE
 // ==========================================
+
 function loadAllCards(){
 
-    showLoader();
+showLoader();
 
-    fetch("ajax.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "action=filter_assets"
-    })
-    .then(response => response.text())
-    .then(data => {
+fetch("ajax.php", {
+method: "POST",
+headers: { "Content-Type": "application/x-www-form-urlencoded" },
+body: "action=filter_assets"
+})
+.then(response => response.text())
+.then(data => {
 
-        document.getElementById("homeCardsContainer").innerHTML = data;
-        document.querySelector(".view-btn").style.display = "none";
+document.getElementById("homeCardsContainer").innerHTML = data;
+document.querySelector(".view-btn").style.display = "none";
 
-        hideLoader();
-    });
+hideLoader();
+
+});
+
 }
+
+
 function showLoader(){
-    document.getElementById("globalLoader").style.display = "flex";
+document.getElementById("globalLoader").style.display = "flex";
 }
 
 function hideLoader(){
-    document.getElementById("globalLoader").style.display = "none";
+document.getElementById("globalLoader").style.display = "none";
 }
+
+
+// ==========================================
+// PASSWORD TOGGLE
+// ==========================================
+
 function togglePassword(inputId, iconWrapper) {
 
-    const input = document.getElementById(inputId);
+const input = document.getElementById(inputId);
 
-    const eyeIcon = `
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="20" height="20" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round">
-            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z"/>
-            <circle cx="12" cy="12" r="3"/>
-        </svg>
-    `;
+const eyeIcon = `
+<svg xmlns="http://www.w3.org/2000/svg"
+width="20" height="20" viewBox="0 0 24 24"
+fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round"
+stroke-linejoin="round">
+<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z"/>
+<circle cx="12" cy="12" r="3"/>
+</svg>
+`;
 
-    const eyeOffIcon = `
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="20" height="20" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round">
-            <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/>
-            <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
-            <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/>
-            <path d="m2 2 20 20"/>
-        </svg>
-    `;
+const eyeOffIcon = `
+<svg xmlns="http://www.w3.org/2000/svg"
+width="20" height="20" viewBox="0 0 24 24"
+fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round"
+stroke-linejoin="round">
+<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575"/>
+<path d="m2 2 20 20"/>
+</svg>
+`;
 
-    if (input.type === "password") {
-        input.type = "text";
-        iconWrapper.innerHTML = eyeIcon;   // show normal eye when visible
-    } else {
-        input.type = "password";
-        iconWrapper.innerHTML = eyeOffIcon; // show eye-off when hidden
-    }
+if (input.type === "password") {
+input.type = "text";
+iconWrapper.innerHTML = eyeIcon;
+} else {
+input.type = "password";
+iconWrapper.innerHTML = eyeOffIcon;
 }
+
+}
+
+
+// ==========================================
+// ADD LAND MODAL
+// ==========================================
+
 function openAddLandModal(){
 let modal = document.getElementById("addLandModal");
 
@@ -185,6 +241,12 @@ modal.classList.add("show");
 function closeAddLandModal(){
 document.getElementById("addLandModal").classList.remove("show");
 }
+
+
+// ==========================================
+// DELETE LAND
+// ==========================================
+
 function deleteLand(id){
 
 if(confirm("Delete this land?")){
@@ -192,6 +254,11 @@ window.location="delete_land.php?id="+id;
 }
 
 }
+
+
+// ==========================================
+// SEARCH LAND
+// ==========================================
 
 function searchLand(){
 
@@ -209,6 +276,11 @@ card.style.display=text.includes(input) ? "block":"none";
 
 }
 
+
+// ==========================================
+// EDIT LAND MODAL
+// ==========================================
+
 function editLand(
 id,
 name,
@@ -221,7 +293,9 @@ status,
 valuation,
 description,
 latitude,
-longitude
+longitude,
+image,
+document
 ){
 
 document.getElementById("edit_id").value = id;
@@ -247,9 +321,40 @@ document.getElementById("edit_long").value = longitude;
 document.getElementById("editLandModal").classList.add("show");
 
 }
+
+
 function closeEditLandModal(){
-    const modal = document.getElementById("editLandModal");
-    if(modal){
-        modal.classList.remove("show");
-    }
+
+const modal = document.getElementById("editLandModal");
+
+if(modal){
+modal.classList.remove("show");
+}
+
+}
+
+function openEditLand(btn){
+
+document.getElementById("edit_id").value = btn.dataset.id;
+
+document.getElementById("edit_name").value = btn.dataset.name;
+document.getElementById("edit_asset_code").value = btn.dataset.asset_code;
+
+document.getElementById("edit_total_lands").value = btn.dataset.total_lands;
+document.getElementById("edit_land_area").value = btn.dataset.land_area;
+
+document.getElementById("edit_location").value = btn.dataset.location;
+document.getElementById("edit_city").value = btn.dataset.city;
+
+document.getElementById("edit_status").value = btn.dataset.status;
+
+document.getElementById("edit_valuation").value = btn.dataset.valuation;
+
+document.getElementById("edit_description").value = btn.dataset.description;
+
+document.getElementById("edit_lat").value = btn.dataset.lat;
+document.getElementById("edit_long").value = btn.dataset.long;
+
+document.getElementById("editLandModal").classList.add("show");
+
 }

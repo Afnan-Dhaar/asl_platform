@@ -95,6 +95,11 @@ body {
 .card h3 {
   margin-top: 0;
   font-weight: 600;
+  color: #8b7a4a;
+}
+
+.card p {
+  color: #8b7a4a;
 }
 
 .help-btn {
@@ -259,6 +264,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s ease;
+  text-decoration: none;
 }
 
 .view-btn:hover {
@@ -618,17 +624,20 @@ body {
   border-bottom: 1px solid #eee;
   text-align: left;
 }
+.asl_admin_table td{
+color: #8b7a4a;
+}
 .asl_admin_table th {
   background: rgb(131 117 80);
   color: white;
 }
 
 .asl_admin_status_active {
-  color: green;
+  color: green !important;
   font-weight: bold;
 }
 .asl_admin_status_inactive {
-  color: red;
+  color: red !important;
   font-weight: bold;
 }
 
@@ -817,17 +826,18 @@ border-radius:999px;
 
 .modal-footer button{
   padding: 10px 18px;
-  border-radius: 8px;
+  background: rgb(131, 117, 80);
+  color: white;
   border: none;
-  background:#2f6df6;
-  color:white;
-  cursor:pointer;
-  font-weight:500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  color: rgb(239, 236, 228);
 }
 
-.modal-footer button:hover{
-  background:#1e56d9;
-}
 
 #toast{
 position:fixed;
@@ -886,4 +896,45 @@ color:white;
   display: flex;
   flex-direction: row;
   gap: 10px;
+}
+
+.manage-lands-heading{
+  color: #8b7a4a;
+  font-size: 28px;
+}
+
+.analytics-page-heading{
+  color: #8b7a4a;
+  font-size: 28px;
+}
+
+.home-page-heading{
+  color: #8b7a4a;
+  font-size: 28px;
+}
+#modalContent h2,p{
+  color: #8b7a4a;
+}
+.edit-user-modal-heading{
+  color: #8b7a4a;
+}
+.add-user-modal-heading{
+  color: #8b7a4a;
+}
+
+.managed-land-edit-modal-heading{
+  color: #8b7a4a;
+  font-size: 20px;
+}
+label{
+  color: #8b7a4a;
+}
+input{
+  color: #8b7a4a;
+}
+textarea{
+  color: #8b7a4a;
+}
+select{
+  color: #8b7a4a;
 }

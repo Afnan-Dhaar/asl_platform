@@ -2,7 +2,7 @@
 include("config.php");
 include("includes/header.php");
 ?>
-<h2>Analytics Page</h2>
+<h2 class="analytics-page-heading">Analytics Page</h2>
 
 <!-- FILTER BOX -->
 <div class="filter-box">
