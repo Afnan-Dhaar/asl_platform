@@ -35,8 +35,11 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- CENTER: MENU -->
 <nav class="menu">
-
-<a href="home.php">ASL Platform</a>
+<a href="index.php">Home</a>
+<a href="about.php">About</a>
+<a href="testimonials.php">Testimonials</a>
+<a href="contact.php">Contact</a>
+<a href="home.php">ASL Platform Assets</a>
 <a href="analytics.php">More Analytics</a>
 
 <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>

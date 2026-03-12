@@ -3,7 +3,7 @@ include("config.php");
 
 // If already logged in → go to home
 if(isset($_SESSION['user_id'])){
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -113,11 +113,11 @@ if(isset($_POST['login'])){
             // ✅ Redirect based on role
             if($user['role'] == 'admin'){
                 echo "<script>
-                    setTimeout(()=>{window.location='home.php'},1500);
+                    setTimeout(()=>{window.location='index.php'},1500);
                 </script>";
             }else{
                 echo "<script>
-                    setTimeout(()=>{window.location='home.php'},1500);
+                    setTimeout(()=>{window.location='index.php'},1500);
                 </script>";
             }
 
