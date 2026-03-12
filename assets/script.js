@@ -358,3 +358,137 @@ document.getElementById("edit_long").value = btn.dataset.long;
 document.getElementById("editLandModal").classList.add("show");
 
 }
+
+document.addEventListener("DOMContentLoaded",function(){
+
+loadCityChart();
+loadStatusChart();
+loadMonthlyChart();
+loadUserChart();
+
+});
+
+
+function loadCityChart(){
+
+fetch("ajax.php",{
+method:"POST",
+headers:{'Content-Type':'application/x-www-form-urlencoded'},
+body:"action=lands_per_city"
+})
+.then(res=>res.json())
+.then(data=>{
+
+let labels=data.map(d=>d.city);
+let values=data.map(d=>d.total);
+
+new Chart(document.getElementById("cityChart"),{
+
+type:"pie",
+
+data:{
+labels:labels,
+datasets:[{
+data:values
+}]
+}
+
+});
+
+});
+}
+
+
+
+function loadStatusChart(){
+
+fetch("ajax.php",{
+method:"POST",
+headers:{'Content-Type':'application/x-www-form-urlencoded'},
+body:"action=lands_by_status"
+})
+.then(res=>res.json())
+.then(data=>{
+
+let labels=data.map(d=>d.status);
+let values=data.map(d=>d.total);
+
+new Chart(document.getElementById("statusChart"),{
+
+type:"doughnut",
+
+data:{
+labels:labels,
+datasets:[{
+data:values
+}]
+}
+
+});
+
+});
+}
+
+
+
+function loadMonthlyChart(){
+
+fetch("ajax.php",{
+method:"POST",
+headers:{'Content-Type':'application/x-www-form-urlencoded'},
+body:"action=lands_monthly"
+})
+.then(res=>res.json())
+.then(data=>{
+
+let labels=data.map(d=>"Month "+d.month);
+let values=data.map(d=>d.total);
+
+new Chart(document.getElementById("monthlyChart"),{
+
+type:"bar",
+
+data:{
+labels:labels,
+datasets:[{
+label:"Lands Added",
+data:values
+}]
+}
+
+});
+
+});
+}
+
+
+
+function loadUserChart(){
+
+fetch("ajax.php",{
+method:"POST",
+headers:{'Content-Type':'application/x-www-form-urlencoded'},
+body:"action=users_growth"
+})
+.then(res=>res.json())
+.then(data=>{
+
+let labels=data.map(d=>"Month "+d.month);
+let values=data.map(d=>d.total);
+
+new Chart(document.getElementById("userChart"),{
+
+type:"line",
+
+data:{
+labels:labels,
+datasets:[{
+label:"Users",
+data:values
+}]
+}
+
+});
+
+});
+}
