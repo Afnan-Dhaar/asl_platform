@@ -1,4 +1,5 @@
 <?php
+include("config.php");
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -12,6 +13,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 $name = htmlspecialchars($_POST['name']);
 $email = htmlspecialchars($_POST['email']);
 $message = htmlspecialchars($_POST['message']);
+
+$stmt = $conn->prepare("INSERT INTO contact_messages(name,email,message) VALUES(?,?,?)");
+$stmt->bind_param("sss",$name,$email,$message);
+$stmt->execute();
 
 $mail = new PHPMailer(true);
 

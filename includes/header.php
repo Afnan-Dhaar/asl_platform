@@ -49,6 +49,8 @@ if (!isset($_SESSION['user_id'])) {
 <a href="manage_lands.php">Manage Lands</a>
 
 <a href="reports.php">Reports</a>
+
+<a href="inbox.php">Inbox</a>
 <?php endif; ?>
 
 <!-- <a href="#">Reports</a> -->

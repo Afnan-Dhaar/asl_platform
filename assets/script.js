@@ -492,3 +492,101 @@ data:values
 
 });
 }
+
+let currentMessageEmail="";
+
+function viewMessage(id){
+
+fetch("ajax.php",{
+method:"POST",
+headers:{"Content-Type":"application/x-www-form-urlencoded"},
+body:"action=get_message&id="+id
+})
+.then(res=>res.json())
+.then(data=>{
+
+document.getElementById("modalName").innerText=data.name;
+document.getElementById("modalEmail").innerText=data.email;
+document.getElementById("modalMessage").innerText=data.message;
+
+currentMessageEmail=data.email;
+
+document.getElementById("messageModal").style.display="block";
+
+});
+
+}
+
+function sendReply(){
+
+let reply = document.getElementById("replyText").value;
+
+fetch("ajax.php",{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:"action=send_reply&email="+encodeURIComponent(currentMessageEmail)+"&message="+encodeURIComponent(reply)
+})
+.then(res=>res.text())
+.then(()=>{
+
+alert("Reply sent successfully");
+document.getElementById("replyText").value="";
+
+});
+
+}
+
+function closeInboxModal(){
+
+document.getElementById("messageModal").style.display="none";
+
+}
+
+
+
+function deleteMessage(id){
+
+if(!confirm("Delete this message?")) return;
+
+fetch("ajax.php",{
+method:"POST",
+headers:{"Content-Type":"application/x-www-form-urlencoded"},
+body:"action=delete_message&id="+id
+})
+
+.then(()=>{
+
+location.reload();
+
+});
+
+}
+
+document.getElementById("messageSearch").addEventListener("keyup",function(){
+
+let filter=this.value.toLowerCase();
+
+let rows=document.querySelectorAll("#messagesTable tr");
+
+rows.forEach(row=>{
+
+let text=row.innerText.toLowerCase();
+
+row.style.display=text.includes(filter)?"":"none";
+
+});
+
+});
+
+
+window.onclick = function(event){
+
+let modal = document.getElementById("assetModal");
+
+if(event.target === modal){
+modal.style.display = "none";
+}
+
+}

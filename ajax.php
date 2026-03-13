@@ -1,6 +1,13 @@
 <?php
 include("config.php");
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
 $action = $_POST['action'] ?? '';
 
 /* ===============================
@@ -142,6 +149,66 @@ header('Content-Type: application/json');
 echo json_encode($data);
 exit();
 
+}
+
+if($action == "get_message"){
+
+$id = intval($_POST['id']);
+
+$result = $conn->query("SELECT * FROM contact_messages WHERE id=$id");
+
+$data = $result->fetch_assoc();
+
+$conn->query("UPDATE contact_messages SET is_read=1 WHERE id=$id");
+
+header('Content-Type: application/json');
+
+echo json_encode($data);
+
+exit();
+}
+
+if($action == "delete_message"){
+
+$id = intval($_POST['id']);
+
+$conn->query("DELETE FROM contact_messages WHERE id=$id");
+
+echo "success";
+
+exit();
+}
+
+if($action == "send_reply"){
+
+$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+$message = htmlspecialchars($_POST['message']);
+
+$mail = new PHPMailer(true);
+
+$mail->isSMTP();
+$mail->Host = 'smtp.gmail.com';
+$mail->SMTPAuth = true;
+
+$mail->Username = 'afnandhar786@gmail.com';
+$mail->Password = 'zdfs mosm tash pylf';
+
+$mail->SMTPSecure = 'tls';
+$mail->Port = 587;
+
+$mail->setFrom('afnandhar786@gmail.com','Admin');
+
+$mail->addAddress($email);
+
+$mail->Subject = "Reply from ASL Platform";
+
+$mail->Body = $message;
+
+$mail->send();
+
+echo "sent";
+
+exit();
 }
 
 
