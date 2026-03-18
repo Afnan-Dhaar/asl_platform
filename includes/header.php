@@ -28,58 +28,60 @@ if (!isset($_SESSION['user_id'])) {
 <!-- ================= HEADER SECTION ================= -->
 <header class="main-header">
 
-    <!-- LEFT: LOGO -->
-    <div class="logo">
+    <!-- LOGO (CLICK TO OPEN MENU) -->
+    <div class="logo" onclick="openSidebar()">
         <h2>AWJ ASL Platform</h2>
     </div>
 
-    <!-- CENTER: MENU -->
-<nav class="menu">
-<a href="index.php">Home</a>
-<a href="about.php">About</a>
-<a href="testimonials.php">Testimonials</a>
-<a href="contact.php">Contact</a>
-<a href="home.php">ASL Platform Assets</a>
-<a href="analytics.php">More Analytics</a>
+</header>
 
-<?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
 
-<a href="admin_users.php">Admin Panel</a>
+<!-- LEFT SIDEBAR MENU -->
+<div id="sidebarMenu" class="sidebar-menu">
 
-<a href="manage_lands.php">Manage Lands</a>
+    <!-- CLOSE BUTTON -->
+    <span class="close-sidebar" onclick="closeSidebar()">×</span>
 
-<a href="reports.php">Reports</a>
-
-<a href="inbox.php">Inbox</a>
-<?php endif; ?>
-
-<!-- <a href="#">Reports</a> -->
-
-</nav>
-
-    <!-- RIGHT: USER INFO -->
-    <!-- RIGHT: USER INFO -->
-<div class="user-section">
-
-    <a href="profile.php" class="user-info">
+    <!-- USER INFO -->
+    <div class="sidebar-user">
 
         <img src="uploads/profile/<?php 
             echo !empty($_SESSION['profile_image']) 
                 ? $_SESSION['profile_image'] 
                 : 'default.png'; 
-        ?>" class="header-profile-img">
+        ?>" class="sidebar-profile-img">
 
-        <span class="username">
-            <?php echo $_SESSION['username']; ?>
-        </span>
+        <h3><?php echo $_SESSION['username']; ?></h3>
 
-    </a>
+    </div>
 
-    <a href="logout.php" class="logout-btn">Logout</a>
+    <!-- MENU LINKS -->
+    <nav class="sidebar-links">
+
+        <a href="index.php">Home</a>
+        <a href="about.php">About</a>
+        <a href="testimonials.php">Testimonials</a>
+        <a href="contact.php">Contact</a>
+        <a href="home.php">Featured Assets</a>
+        <a href="analytics.php">More Analytics</a>
+        <a href="my_lands.php">My Lands</a>
+
+        <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
+
+        <a href="admin_users.php">Admin Panel</a>
+        <a href="manage_lands.php">Manage Lands</a>
+        <a href="reports.php">Reports</a>
+        <a href="inbox.php">Inbox</a>
+        <a href="manage_requests.php">Manage Requests</a>
+
+        <?php endif; ?>
+
+        <a href="profile.php">Profile</a>
+        <a href="logout.php" class="logout-link">Logout</a>
+
+    </nav>
 
 </div>
-
-</header>
 
 <!-- MAIN CONTENT WRAPPER START -->
 <div class="main-content">

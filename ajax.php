@@ -13,7 +13,6 @@ $action = $_POST['action'] ?? '';
 /* ===============================
 GET SINGLE ASSET FOR MODAL
 =============================== */
-
 if($action == "get_asset"){
 
 $id = intval($_POST['id']);
@@ -28,7 +27,6 @@ echo json_encode($data);
 
 exit();
 }
-
 
 /* ===============================
 FILTER ASSETS (Analytics + Home)
@@ -237,4 +235,62 @@ exit();
 
 }
 
+if($action == "send_request"){
+
+$asset_id = intval($_POST['asset_id']);
+$type = $_POST['type'];
+$message = $_POST['message'] ?? '';
+
+$user_id = $_SESSION['user_id'];
+
+$user = $conn->query("SELECT username,email FROM users WHERE id=$user_id")->fetch_assoc();
+
+$username = $user['username'];
+$email = $user['email'];
+
+/* Prevent duplicate requests */
+
+$check = $conn->query("
+SELECT id FROM land_requests 
+WHERE asset_id=$asset_id AND user_email='$email'
+");
+
+if($check->num_rows > 0){
+echo "You already requested this land.";
+exit();
+}
+
+/* Save request */
+
+$conn->query("
+INSERT INTO land_requests(asset_id,user_name,user_email,request_type,message,status)
+VALUES($asset_id,'$username','$email','$type','$message','pending')
+");
+
+echo "Request sent successfully";
+
+exit();
+}
+
+if($action == "get_request"){
+
+$id = intval($_POST['id']);
+
+$result = $conn->query("
+SELECT land_requests.*, assets.name as asset_name
+FROM land_requests
+JOIN assets ON assets.id = land_requests.asset_id
+WHERE land_requests.id=$id
+");
+
+$data = $result->fetch_assoc();
+
+header('Content-Type: application/json');
+
+echo json_encode($data);
+
+exit();
+}
+
 ?>
+

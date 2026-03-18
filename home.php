@@ -5,14 +5,14 @@ include("includes/header.php"); // Header layout + session protection
 
 <!-- ================= HOME CARDS SECTION ================= -->
 
-<h2 class="home-page-heading">ASL Platform Assets</h2>
+<h2 class="home-page-heading">Featured Assets</h2>
 
 <!-- Cards Container -->
 <div id="homeCardsContainer" class="cards-container">
 
 <?php
 // Fetch only 4 cards initially
-$result = $conn->query("SELECT * FROM assets LIMIT 4");
+$result = $conn->query("SELECT * FROM assets LIMIT 8");
 
 while($row = $result->fetch_assoc()){
 ?>
@@ -33,11 +33,11 @@ while($row = $result->fetch_assoc()){
 
 <!-- ================= VIEW ALL BUTTON ================= -->
 <!-- This now loads all cards using AJAX instead of redirecting -->
-<div style="margin-top:20px;">
+<!-- <div style="margin-top:20px;">
     <button onclick="loadAllCards()" class="view-btn">
         View All Cards
     </button>
-</div>
+</div> -->
 
 
 <!-- ================= MODAL FOR CARD DETAILS ================= -->

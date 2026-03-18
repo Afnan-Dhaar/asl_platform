@@ -37,11 +37,11 @@ document.getElementById("helpModal").classList.remove("show");
 // OPEN ASSET MODAL (AJAX FETCH SINGLE ASSET)
 // ==========================================
 
-function openAssetModal(id){
+function openAssetModal(id,page="home"){
 
 console.log("Opening modal for asset:", id);
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{
 "Content-Type":"application/x-www-form-urlencoded"
@@ -60,10 +60,12 @@ return;
 
 let imageHTML = "";
 let documentHTML = "";
+let requestButtons = "";
+let descriptionHTML = "";
 
 if(data.image){
 imageHTML = `
-<img src="uploads/images/${data.image}"
+<img src="/asl_platform/uploads/images/${data.image}"
 style="width:100%;max-height:250px;object-fit:cover;border-radius:10px;margin-bottom:15px;">
 `;
 }
@@ -72,10 +74,40 @@ if(data.document){
 documentHTML = `
 <br><br>
 <a class="view-btn"
-href="uploads/documents/${data.document}"
+href="/asl_platform/uploads/documents/${data.document}"
 target="_blank">
 Download Land Document
 </a>
+`;
+}
+
+/* show description only on normal pages */
+
+if(page !== "mylands"){
+descriptionHTML = `
+<p><strong>Description:</strong> ${data.description}</p>
+`;
+}
+
+/* show buy/rent only on normal pages */
+
+if(page !== "mylands"){
+requestButtons = `
+
+<br><br>
+
+<button class="buy-btn" onclick="sendRequest(${data.id},'buy')">
+Buy Land
+</button>
+
+<button class="rent-btn" onclick="sendRequest(${data.id},'rent')">
+Rent Land
+</button>
+
+<textarea id="requestMessage"
+placeholder="Add message for admin (optional)"
+style="width:100%;height:80px;margin-top:10px"></textarea>
+
 `;
 }
 
@@ -92,7 +124,8 @@ ${imageHTML}
 <p><strong>City:</strong> ${data.city}</p>
 <p><strong>Status:</strong> ${data.status}</p>
 <p><strong>Valuation:</strong> ${data.valuation}</p>
-<p><strong>Description:</strong> ${data.description}</p>
+
+${descriptionHTML}
 
 <br>
 
@@ -103,6 +136,8 @@ View Location on Map
 </a>
 
 ${documentHTML}
+
+${requestButtons}
 
 `;
 
@@ -119,7 +154,6 @@ alert("Error loading asset");
 
 }
 
-
 function closeModal(){
 document.getElementById("assetModal").classList.remove("show");
 }
@@ -134,7 +168,7 @@ function applyFilter(){
 let city = document.getElementById("filterCity").value;
 let status = document.getElementById("filterStatus").value;
 
-fetch("ajax.php", {
+fetch("/asl_platform/ajax.php", {
 method: "POST",
 headers: { "Content-Type": "application/x-www-form-urlencoded" },
 body: "action=filter_assets&city=" + encodeURIComponent(city) +
@@ -158,7 +192,7 @@ function loadAllCards(){
 
 showLoader();
 
-fetch("ajax.php", {
+fetch("/asl_platform/ajax.php", {
 method: "POST",
 headers: { "Content-Type": "application/x-www-form-urlencoded" },
 body: "action=filter_assets"
@@ -371,7 +405,7 @@ loadUserChart();
 
 function loadCityChart(){
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{'Content-Type':'application/x-www-form-urlencoded'},
 body:"action=lands_per_city"
@@ -402,7 +436,7 @@ data:values
 
 function loadStatusChart(){
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{'Content-Type':'application/x-www-form-urlencoded'},
 body:"action=lands_by_status"
@@ -433,7 +467,7 @@ data:values
 
 function loadMonthlyChart(){
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{'Content-Type':'application/x-www-form-urlencoded'},
 body:"action=lands_monthly"
@@ -465,7 +499,7 @@ data:values
 
 function loadUserChart(){
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{'Content-Type':'application/x-www-form-urlencoded'},
 body:"action=users_growth"
@@ -497,7 +531,7 @@ let currentMessageEmail="";
 
 function viewMessage(id){
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{"Content-Type":"application/x-www-form-urlencoded"},
 body:"action=get_message&id="+id
@@ -521,7 +555,7 @@ function sendReply(){
 
 let reply = document.getElementById("replyText").value;
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{
 "Content-Type":"application/x-www-form-urlencoded"
@@ -550,7 +584,7 @@ function deleteMessage(id){
 
 if(!confirm("Delete this message?")) return;
 
-fetch("ajax.php",{
+fetch("/asl_platform/ajax.php",{
 method:"POST",
 headers:{"Content-Type":"application/x-www-form-urlencoded"},
 body:"action=delete_message&id="+id
@@ -589,4 +623,115 @@ if(event.target === modal){
 modal.style.display = "none";
 }
 
+}
+
+function sendRequest(assetId,type){
+
+let msg = document.getElementById("requestMessage").value;
+
+fetch("/asl_platform/ajax.php",{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:"action=send_request&asset_id="+assetId+"&type="+type+"&message="+encodeURIComponent(msg)
+})
+
+.then(res=>res.text())
+.then(data=>{
+alert(data);
+});
+
+}
+
+function viewRequest(id){
+
+console.log("Opening request:", id);
+
+fetch("/asl_platform/ajax.php",{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:"action=get_request&id="+id
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let html = `
+
+<h2>Request Details</h2>
+
+<p><strong>User:</strong> ${data.user_name}</p>
+<p><strong>Email:</strong> ${data.user_email}</p>
+<p><strong>Asset:</strong> ${data.asset_name}</p>
+<p><strong>Type:</strong> ${data.request_type}</p>
+<p><strong>Message:</strong> ${data.message}</p>
+<p><strong>Status:</strong> ${data.status}</p>
+
+`;
+
+document.getElementById("requestDetails").innerHTML = html;
+
+document.getElementById("requestModal").style.display = "block";
+
+})
+
+.catch(err=>{
+console.error(err);
+alert("Error loading request");
+});
+
+}
+
+function closeRequestModal(){
+
+document.getElementById("requestModal").style.display="none";
+
+}
+
+function filterRequests(){
+
+let search = document.getElementById("searchRequests").value.toLowerCase();
+
+let status = document.getElementById("statusFilter").value;
+
+let type = document.getElementById("typeFilter").value;
+
+let rows = document.querySelectorAll("#requestsTable tr");
+
+rows.forEach((row,i)=>{
+
+if(i==0) return;
+
+let text = row.innerText.toLowerCase();
+
+let show = true;
+
+if(search && !text.includes(search)) show=false;
+
+if(status && !text.includes(status)) show=false;
+
+if(type && !text.includes(type)) show=false;
+
+row.style.display = show ? "" : "none";
+
+});
+
+}
+
+function closeRequestModal(){
+
+document.getElementById("requestModal").style.display="none";
+
+}
+
+function openSidebar(){
+document.getElementById("sidebarMenu").classList.add("active");
+}
+
+function closeSidebar(){
+document.getElementById("sidebarMenu").classList.remove("active");
 }
