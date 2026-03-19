@@ -6,7 +6,10 @@ include("includes/header.php");
 
 <!-- FILTER BOX -->
 <div class="filter-box">
-    <input type="text" id="filterCity" placeholder="City">
+
+    <input type="text" id="filterName" placeholder="Search by Name">
+    <input type="text" id="filterCity" placeholder="Search by City">
+    <input type="text" id="filterCode" placeholder="Search by Asset Code">
 
     <select id="filterStatus">
         <option value="">All Status</option>
@@ -14,8 +17,17 @@ include("includes/header.php");
         <option value="Lease">Lease</option>
     </select>
 
-    <button class="filter-btn" onclick="applyFilter()">Apply Filter</button>
+    <input type="number" id="filterMinArea" placeholder="Min Area">
+    <input type="number" id="filterMaxArea" placeholder="Max Area">
+
+    <input type="number" id="filterMinPrice" placeholder="Min Price">
+    <input type="number" id="filterMaxPrice" placeholder="Max Price">
+
+    <button class="reset-btn" onclick="resetFilters()">Reset</button>
+
 </div>
+
+<div id="filterChips" class="filter-chips"></div>
 
 <!-- CARDS CONTAINER -->
 <div id="cardsContainer" class="cards-container">

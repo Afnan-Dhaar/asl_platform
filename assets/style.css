@@ -253,14 +253,19 @@ font-weight:600;
   transition: 0.3s ease;
   position: relative;
 }
+.modal-content input{
+  color: #8b7a4a;
+}
 
 .modal-content h3 {
   font-weight: 600;
   font-size: 30px;
+  color: #8b7a4a;
 }
 .modal-content p {
   font-weight: 400;
   font-size: large;
+  color: #8b7a4a;
 }
 .modal.show .modal-content {
   transform: translateY(0);
@@ -1609,4 +1614,83 @@ padding: 12px 25px;
     font-weight: 600;
     margin-bottom: 25px;
     color: rgb(131 117 80);
+}
+
+.filter-box{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.filter-box input,
+.filter-box select{
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.reset-btn{
+background:#e74c3c;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* CHIPS */
+.filter-chips{
+margin-bottom:15px;
+}
+
+.chip{
+display:inline-block;
+background:#8b7a4a;
+color:white;
+padding:6px 12px;
+border-radius:20px;
+margin-right:8px;
+font-size:13px;
+}
+
+.chip{
+display:inline-flex;
+align-items:center;
+background:#8b7a4a;
+color:white;
+padding:6px 10px;
+border-radius:20px;
+margin-right:8px;
+font-size:13px;
+}
+
+.chip-close{
+margin-left:8px;
+cursor:pointer;
+font-weight:bold;
+color: white;
+}
+
+.buy-btn{
+  padding: 12px 25px;
+  background: #8b7a4a;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.rent-btn{
+  padding: 12px 25px;
+  background: #8b7a4a;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-decoration: none;
 }

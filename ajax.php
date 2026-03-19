@@ -34,17 +34,53 @@ FILTER ASSETS (Analytics + Home)
 
 if($action == "filter_assets"){
 
+$name = $_POST['name'] ?? '';
 $city = $_POST['city'] ?? '';
+$code = $_POST['code'] ?? '';
 $status = $_POST['status'] ?? '';
+$minArea = $_POST['minArea'] ?? '';
+$maxArea = $_POST['maxArea'] ?? '';
+$minPrice = $_POST['minPrice'] ?? '';
+$maxPrice = $_POST['maxPrice'] ?? '';
 
 $query = "SELECT * FROM assets WHERE 1";
 
+// NAME
+if($name != ""){
+$query .= " AND name LIKE '%$name%'";
+}
+
+// CITY
 if($city != ""){
 $query .= " AND city LIKE '%$city%'";
 }
 
+// CODE
+if($code != ""){
+$query .= " AND asset_code LIKE '%$code%'";
+}
+
+// STATUS
 if($status != ""){
 $query .= " AND status='$status'";
+}
+
+// AREA
+if($minArea != ""){
+$query .= " AND land_area >= $minArea";
+}
+
+if($maxArea != ""){
+$query .= " AND land_area <= $maxArea";
+}
+
+// PRICE (assuming column = valuation)
+if($minPrice != ""){
+$query .= " AND valuation >= $minPrice";
+}
+
+if($maxPrice != ""){
+$query .= " AND valuation <= $maxPrice";
 }
 
 $result = $conn->query($query);
@@ -70,9 +106,7 @@ while($row = $result->fetch_assoc()){
 }
 
 exit();
-
 }
-
 
 /* ===============================
 REPORT: LANDS PER CITY

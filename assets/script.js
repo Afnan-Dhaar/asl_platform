@@ -94,7 +94,7 @@ descriptionHTML = `
 if(page !== "mylands"){
 requestButtons = `
 
-<br><br>
+
 
 <button class="buy-btn" onclick="sendRequest(${data.id},'buy')">
 Buy Land
@@ -106,7 +106,7 @@ Rent Land
 
 <textarea id="requestMessage"
 placeholder="Add message for admin (optional)"
-style="width:100%;height:80px;margin-top:10px"></textarea>
+style="width:100%;height:50px;margin-top:10px;border-radius:8px;"></textarea>
 
 `;
 }
@@ -165,25 +165,94 @@ document.getElementById("assetModal").classList.remove("show");
 
 function applyFilter(){
 
+let name = document.getElementById("filterName").value;
 let city = document.getElementById("filterCity").value;
+let code = document.getElementById("filterCode").value;
 let status = document.getElementById("filterStatus").value;
+let minArea = document.getElementById("filterMinArea").value;
+let maxArea = document.getElementById("filterMaxArea").value;
+let minPrice = document.getElementById("filterMinPrice").value;
+let maxPrice = document.getElementById("filterMaxPrice").value;
 
 fetch("/asl_platform/ajax.php", {
 method: "POST",
 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-body: "action=filter_assets&city=" + encodeURIComponent(city) +
-"&status=" + encodeURIComponent(status)
+body:
+"action=filter_assets" +
+"&name=" + encodeURIComponent(name) +
+"&city=" + encodeURIComponent(city) +
+"&code=" + encodeURIComponent(code) +
+"&status=" + encodeURIComponent(status) +
+"&minArea=" + encodeURIComponent(minArea) +
+"&maxArea=" + encodeURIComponent(maxArea) +
+"&minPrice=" + encodeURIComponent(minPrice) +
+"&maxPrice=" + encodeURIComponent(maxPrice)
 })
-.then(response => response.text())
+.then(res => res.text())
 .then(data => {
 
 document.getElementById("cardsContainer").innerHTML = data;
 
+updateFilterChips();
+
+});
+}
+// Live filtering (no button)
+document.querySelectorAll(
+"#filterName, #filterCity, #filterCode, #filterStatus, #filterMinArea, #filterMaxArea, #filterMinPrice, #filterMaxPrice"
+)
+.forEach(el => {
+el.addEventListener("input", applyFilter);
 });
 
+function resetFilters(){
+
+document.querySelectorAll(".filter-box input, .filter-box select")
+.forEach(el => el.value = "");
+
+applyFilter();
+}
+function updateFilterChips(){
+
+let chipsHTML = "";
+
+// helper
+function createChip(label, value, field){
+return `<span class="chip">
+${label}: ${value}
+<span class="chip-close" onclick="removeFilter('${field}')">×</span>
+</span>`;
 }
 
+// values
+let name = document.getElementById("filterName").value;
+let city = document.getElementById("filterCity").value;
+let code = document.getElementById("filterCode").value;
+let status = document.getElementById("filterStatus").value;
+let minArea = document.getElementById("filterMinArea").value;
+let maxArea = document.getElementById("filterMaxArea").value;
+let minPrice = document.getElementById("filterMinPrice").value;
+let maxPrice = document.getElementById("filterMaxPrice").value;
 
+// build chips
+if(name) chipsHTML += createChip("Name", name, "filterName");
+if(city) chipsHTML += createChip("City", city, "filterCity");
+if(code) chipsHTML += createChip("Code", code, "filterCode");
+if(status) chipsHTML += createChip("Status", status, "filterStatus");
+if(minArea) chipsHTML += createChip("Min Area", minArea, "filterMinArea");
+if(maxArea) chipsHTML += createChip("Max Area", maxArea, "filterMaxArea");
+if(minPrice) chipsHTML += createChip("Min Price", minPrice, "filterMinPrice");
+if(maxPrice) chipsHTML += createChip("Max Price", maxPrice, "filterMaxPrice");
+
+document.getElementById("filterChips").innerHTML = chipsHTML;
+}
+
+function removeFilter(field){
+
+document.getElementById(field).value = "";
+
+applyFilter();
+}
 // ==========================================
 // LOAD ALL CARDS ON HOME PAGE
 // ==========================================
