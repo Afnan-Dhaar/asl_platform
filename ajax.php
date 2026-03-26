@@ -191,12 +191,20 @@ $result = $conn->query("SELECT * FROM contact_messages WHERE id=$id");
 
 $data = $result->fetch_assoc();
 
-$conn->query("UPDATE contact_messages SET is_read=1 WHERE id=$id");
-
 header('Content-Type: application/json');
 
 echo json_encode($data);
 
+exit();
+}
+
+if($action == "mark_as_read"){
+
+$id = intval($_POST['id']);
+
+$conn->query("UPDATE contact_messages SET is_read=1 WHERE id=$id");
+
+echo "success";
 exit();
 }
 

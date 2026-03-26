@@ -148,14 +148,24 @@ position:fixed;
 top:0;
 left:-370px;
 width:300px;
-height:100%;
+height:100vh; /* better than 100% */
 background:#ffffff;
 box-shadow:2px 0 15px rgba(0,0,0,0.15);
 transition:0.3s;
 z-index:9999;
 padding:30px;
+
+/* ✅ ADD THIS */
+overflow-y:auto;
+}
+.sidebar-menu::-webkit-scrollbar{
+width:6px;
 }
 
+.sidebar-menu::-webkit-scrollbar-thumb{
+background:#8b7a4a;
+border-radius:10px;
+}
 .sidebar-menu.active{
 left:0;
 }
@@ -191,6 +201,7 @@ margin-bottom:10px;
 .sidebar-links{
 display:flex;
 flex-direction:column;
+padding-bottom: 5rem;
 }
 
 .sidebar-links a{
@@ -266,6 +277,8 @@ font-weight:600;
   font-weight: 400;
   font-size: large;
   color: #8b7a4a;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .modal.show .modal-content {
   transform: translateY(0);
@@ -1693,4 +1706,25 @@ color: white;
   cursor: pointer;
   transition: 0.3s ease;
   text-decoration: none;
+}
+
+
+/* UNIQUE PREFIX: msg- */
+
+.msg-status-badge{
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+display:inline-block;
+}
+
+.msg-status-badge.unread{
+background:#ffe6e6;
+color:#c0392b;
+}
+
+.msg-status-badge.read{
+background:#e6f7ee;
+color:#27ae60;
 }

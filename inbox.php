@@ -59,6 +59,7 @@ $todayMessages = $conn->query("SELECT COUNT(*) as total FROM contact_messages WH
 <th>Name</th>
 <th>Email</th>
 <th>View</th>
+<th>Status</th>
 <th>Date</th>
 <th>Action</th>
 </tr>
@@ -79,7 +80,13 @@ $todayMessages = $conn->query("SELECT COUNT(*) as total FROM contact_messages WH
 View
 </button>
 </td>
-
+<td>
+<?php if($row['is_read'] == 0){ ?>
+    <span class="msg-status-badge unread">Unread</span>
+<?php } else { ?>
+    <span class="msg-status-badge read">Read</span>
+<?php } ?>
+</td>
 <td><?php echo $row['created_at']; ?></td>
 
 <td>

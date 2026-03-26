@@ -66,7 +66,7 @@ let descriptionHTML = "";
 if(data.image){
 imageHTML = `
 <img src="/asl_platform/uploads/images/${data.image}"
-style="width:100%;max-height:250px;object-fit:cover;border-radius:10px;margin-bottom:15px;">
+style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:15px;">
 `;
 }
 
@@ -106,7 +106,7 @@ Rent Land
 
 <textarea id="requestMessage"
 placeholder="Add message for admin (optional)"
-style="width:100%;height:50px;margin-top:10px;border-radius:8px;"></textarea>
+style="width:95%;height:50px;margin-top:10px;border-radius:12px;padding:12px;"></textarea>
 
 `;
 }
@@ -597,8 +597,10 @@ data:values
 }
 
 let currentMessageEmail="";
-
+let currentMessageId = null;
 function viewMessage(id){
+
+currentMessageId = id; 
 
 fetch("/asl_platform/ajax.php",{
 method:"POST",
@@ -617,7 +619,6 @@ currentMessageEmail=data.email;
 document.getElementById("messageModal").style.display="block";
 
 });
-
 }
 
 function sendReply(){
@@ -645,9 +646,43 @@ function closeInboxModal(){
 
 document.getElementById("messageModal").style.display="none";
 
+if(currentMessageId){
+
+fetch("/asl_platform/ajax.php",{
+method:"POST",
+headers:{"Content-Type":"application/x-www-form-urlencoded"},
+body:"action=mark_as_read&id="+currentMessageId
+})
+.then(()=>{
+
+
+applyMessageUIUpdate(currentMessageId);
+
+});
+
+}
+}
+function applyMessageUIUpdate(id){
+
+let rows = document.querySelectorAll("#messagesTable tr");
+
+rows.forEach(row=>{
+let btn = row.querySelector(".view-btn");
+
+if(btn && btn.getAttribute("onclick").includes(id)){
+    
+    let badge = row.querySelector(".msg-status-badge");
+
+    if(badge){
+        badge.classList.remove("unread");
+        badge.classList.add("read");
+        badge.innerText = "Read";
+    }
+
 }
 
-
+});
+}
 
 function deleteMessage(id){
 
